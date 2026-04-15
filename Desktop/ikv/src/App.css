@@ -1,0 +1,41 @@
+body {
+  background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.title-banner {
+  background: linear-gradient(90deg, #4b6cb7 0%, #182848 100%);
+  padding: 15px 40px;
+  border-radius: 50px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+}
+
+.product-card {
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.2) !important;
+}
+
+.product-card:hover .product-image {
+  transform: scale(1.05);
+}
+
+.greeting-section {
+  border-top: 5px solid #4b6cb7;
+  transition: all 0.3s ease;
+}
+
+.greeting-section:hover {
+  background-color: #f8f9fa !important;
+}
+
+.greeting-image {
+  transition: transform 0.5s ease;
+}
+
+.greeting-image:hover {
+  transform: rotate(5deg) scale(1.05);
+}
