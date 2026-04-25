@@ -178,6 +178,14 @@ export default function AuthPage() {
               {loading ? <Loader2 className="animate-spin" /> : isLogin ? t("auth.form.signIn") : t("auth.form.signUp")}
               {!loading && <ArrowRight size={20} className={cn(dir === 'rtl' ? 'rotate-180' : '')} />}
             </button>
+
+            {isLogin && (
+              <div className="text-center">
+                <Link href="/forgot-password" className="text-xs font-bold text-muted-foreground hover:text-primary transition-colors">
+                  {t("auth.form.forgotPassword") || "Forgot your password?"}
+                </Link>
+              </div>
+            )}
           </form>
 
           <div className="relative py-4">

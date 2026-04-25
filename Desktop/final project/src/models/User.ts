@@ -17,6 +17,7 @@ export interface IUser extends Document {
     matching: boolean;
   };
   favorites: mongoose.Types.ObjectId[];
+  isAdmin: boolean;
   createdAt: Date;
 }
 
@@ -28,6 +29,7 @@ const UserSchema: Schema = new Schema({
   phone: { type: String },
   isBusiness: { type: Boolean, default: false },
   isVerified: { type: Boolean, default: false },
+  isAdmin: { type: Boolean, default: false },
   
   // Business fields
   subscriptionPlan: { 

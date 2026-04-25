@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useAuth } from "@/contexts/AuthContext";
 import { useState } from "react";
 import { BoostPricing } from "./BoostPricing";
 
@@ -45,6 +46,7 @@ export function PostCard({
   onDelete
 }: PostCardProps) {
   const { t, dir, language } = useLanguage();
+  const { user } = useAuth();
   const locale = language === 'ar' ? ar : language === 'fr' ? fr : enUS;
   const [showActions, setShowActions] = useState(false);
   const [showBoost, setShowBoost] = useState(false);
@@ -55,6 +57,8 @@ export function PostCard({
   const isPremium = activePlan === "premium";
   const isPro     = activePlan === "pro";
   const isStarter = activePlan === "starter";
+
+  const isOwner = user?._id === author?._id;
 
   const handleDelete = async () => {
     if (!confirm(t("post.deleteConfirm"))) return;
@@ -104,38 +108,43 @@ export function PostCard({
               </div>
             </div>
           </div>
-          <div className="relative">
-            <button 
-              onClick={() => setShowActions(!showActions)}
-              className="text-muted-foreground hover:bg-secondary p-2 rounded-full transition-colors"
-            >
-              <MoreHorizontal size={18} />
-            </button>
-            
-            {showActions && (
-              <div className={cn(
-                "absolute top-full mt-1 w-36 bg-background border border-border rounded-xl shadow-2xl z-50 overflow-hidden p-1",
-                dir === 'rtl' ? 'left-0' : 'right-0'
-              )}>
-                <button 
-                  onClick={() => { setShowBoost(true); setShowActions(false); }}
-                  className="w-full flex items-center gap-2 px-3 py-2 text-sm font-bold text-primary hover:bg-primary/5 rounded-lg transition-colors"
-                >
-                  <Zap size={14} className="fill-primary" /> {t("sidebar.boost.btn")}
-                </button>
-                <button className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-secondary rounded-lg transition-colors">
-                  <Edit size={14} /> {t("post.edit")}
-                </button>
-                <div className="h-px bg-border my-1" />
-                <button 
-                  onClick={handleDelete}
-                  className="w-full flex items-center gap-2 px-3 py-2 text-sm text-destructive hover:bg-destructive/10 rounded-lg transition-colors"
-                >
-                  <Trash2 size={14} /> {t("post.delete")}
-                </button>
-              </div>
-            )}
-          </div>
+          {isOwner && (
+            <div className="relative">
+              <button 
+                onClick={() => setShowActions(!showActions)}
+                className="text-muted-foreground hover:bg-secondary p-2 rounded-full transition-colors"
+              >
+                <MoreHorizontal size={18} />
+              </button>
+              
+              {showActions && (
+                <div className={cn(
+                  "absolute top-full mt-1 w-36 bg-background border border-border rounded-xl shadow-2xl z-50 overflow-hidden p-1",
+                  dir === 'rtl' ? 'left-0' : 'right-0'
+                )}>
+                  <button 
+                    onClick={() => { setShowBoost(true); setShowActions(false); }}
+                    className="w-full flex items-center gap-2 px-3 py-2 text-sm font-bold text-primary hover:bg-primary/5 rounded-lg transition-colors"
+                  >
+                    <Zap size={14} className="fill-primary" /> {t("sidebar.boost.btn")}
+                  </button>
+                  <button 
+                    onClick={() => { window.location.href = `/edit-post/${id}`; }}
+                    className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-secondary rounded-lg transition-colors"
+                  >
+                    <Edit size={14} /> {t("post.edit")}
+                  </button>
+                  <div className="h-px bg-border my-1" />
+                  <button 
+                    onClick={handleDelete}
+                    className="w-full flex items-center gap-2 px-3 py-2 text-sm text-destructive hover:bg-destructive/10 rounded-lg transition-colors"
+                  >
+                    <Trash2 size={14} /> {t("post.delete")}
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Image (if any) */}
