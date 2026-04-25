@@ -208,6 +208,25 @@ export function CallInterface({
     };
   }, [status]);
 
+  // Apply Mute and Video toggles to tracks
+  useEffect(() => {
+    if (localStream) {
+      localStream.getAudioTracks().forEach(track => {
+        track.enabled = !isMuted;
+      });
+      localStream.getVideoTracks().forEach(track => {
+        track.enabled = isVideoOn;
+      });
+    }
+  }, [isMuted, isVideoOn, localStream]);
+
+  // Handle Speaker (Volume) toggle
+  useEffect(() => {
+    if (remoteVideoRef.current) {
+      remoteVideoRef.current.muted = !isSpeaker;
+    }
+  }, [isSpeaker]);
+
   const handleEnd = async () => {
     if (callId) {
       await fetch("/api/calls/respond", {

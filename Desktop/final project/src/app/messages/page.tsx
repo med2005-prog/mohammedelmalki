@@ -57,7 +57,11 @@ export default function MessagesPage() {
       }
     };
 
-    if (user) fetchConversations();
+    if (user) {
+      fetchConversations();
+      const interval = setInterval(fetchConversations, 5000);
+      return () => clearInterval(interval);
+    }
   }, [user]);
 
   // Fetch messages for active chat
