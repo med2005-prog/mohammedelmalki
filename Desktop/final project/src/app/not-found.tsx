@@ -24,7 +24,7 @@ export default function NotFound() {
         
         <div className="space-y-2">
           <h2 className="text-3xl font-black tracking-tight">
-            {language === 'ar' ? "الصفحة غير موجودة" : "Page Not Found"}
+            {t("common.pageNotFound")}
           </h2>
           <p className="text-muted-foreground font-medium">
             {language === 'ar' 

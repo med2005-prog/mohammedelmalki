@@ -3,6 +3,7 @@ import connectToDatabase from "@/lib/mongodb";
 import Message from "@/models/Message";
 import Conversation from "@/models/Conversation";
 import { getUserIdFromSession } from "@/lib/auth";
+import { sendPushNotification } from "@/lib/push";
 
 export async function POST(req: Request) {
   try {
@@ -30,6 +31,13 @@ export async function POST(req: Request) {
     await Conversation.findByIdAndUpdate(conversationId, {
       lastMessage: type === "text" ? content : "Voice message 🎙️",
       lastMessageAt: new Date()
+    });
+
+    // Send Push Notification to receiver
+    sendPushNotification(receiverId, {
+      title: "New Message ✉️",
+      body: type === "text" ? content : "You received a voice message 🎙️",
+      data: { url: "/messages" }
     });
 
     return NextResponse.json({ success: true, data: message });

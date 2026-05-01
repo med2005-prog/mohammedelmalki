@@ -15,6 +15,24 @@ export function IncomingCallListener() {
   const [activeCall, setActiveCall] = useState<any>(null);
   const [isRinging, setIsRinging] = useState(false);
 
+  const [ringtone] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const audio = new Audio("https://assets.mixkit.co/active_storage/sfx/1359/1359-preview.mp3"); // Standard digital ring
+      audio.loop = true;
+      return audio;
+    }
+    return null;
+  });
+
+  useEffect(() => {
+    if (isRinging && ringtone) {
+      ringtone.play().catch(e => console.log("Audio play failed, user interaction needed", e));
+    } else if (ringtone) {
+      ringtone.pause();
+      ringtone.currentTime = 0;
+    }
+  }, [isRinging, ringtone]);
+
   useEffect(() => {
     if (!user) return;
 
@@ -32,13 +50,18 @@ export function IncomingCallListener() {
               navigator.vibrate([500, 200, 500, 200, 500]);
             }
           }
+        } else if (isRinging) {
+          // Call was cancelled by caller
+          setIsRinging(false);
+          setIncomingCall(null);
+          if ("vibrate" in navigator) navigator.vibrate(0);
         }
       } catch (err) {
         console.error("Failed to check calls", err);
       }
     };
 
-    const interval = setInterval(checkCalls, 4000);
+    const interval = setInterval(checkCalls, 500);
     return () => clearInterval(interval);
   }, [user, activeCall, isRinging]);
 
@@ -109,8 +132,8 @@ export function IncomingCallListener() {
                   <h3 className="text-2xl font-black">{incomingCall.caller?.name}</h3>
                   <p className="text-xs font-bold text-primary uppercase tracking-[0.2em] animate-pulse">
                     {incomingCall.type === 'video' 
-                      ? (language === 'ar' ? "مكالمة فيديو واردة..." : "Incoming Video Call...") 
-                      : (language === 'ar' ? "مكالمة صوتية واردة..." : "Incoming Voice Call...")}
+                      ? t("call.incoming.video") 
+                      : t("call.incoming.voice")}
                   </p>
                 </div>
 

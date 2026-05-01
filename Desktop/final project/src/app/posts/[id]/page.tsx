@@ -14,6 +14,7 @@ import Image from "next/image";
 import { formatDistanceToNow } from "date-fns";
 import dynamic from "next/dynamic";
 import { PostCard } from "@/components/PostCard";
+import { optimizeImage } from "@/lib/image-utils";
 
 const MapArea = dynamic(() => import("@/components/MapArea"), { 
   ssr: false,
@@ -118,7 +119,7 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
           <div className="relative aspect-video rounded-[3rem] overflow-hidden shadow-2xl bg-secondary border-4 border-white">
             {post.images?.[0] ? (
               <Image 
-                src={post.images[0]} 
+                src={optimizeImage(post.images[0], 1200)} 
                 alt={post.title} 
                 fill 
                 className="object-cover"
@@ -164,17 +165,17 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
                     <p className="font-bold text-primary">{post.category}</p>
                  </div>
                  <div className="space-y-1">
-                    <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{language === 'ar' ? "المدينة" : "City"}</p>
+                    <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{t("form.location")}</p>
                     <p className="font-bold">{post.city}</p>
                  </div>
                  <div className="space-y-1">
-                    <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{language === 'ar' ? "الحالة" : "Status"}</p>
+                    <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{t("form.status")}</p>
                     <p className={cn("font-bold", post.status === 'active' ? "text-green-500" : "text-muted-foreground")}>
                       {post.status.toUpperCase()}
                     </p>
                  </div>
                  <div className="space-y-1">
-                    <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{language === 'ar' ? "المشاهدات" : "Views"}</p>
+                    <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{t("form.views")}</p>
                     <p className="font-bold">{post.views || 0}</p>
                  </div>
               </div>
@@ -243,7 +244,7 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
               <div className="pt-6 border-t flex items-center gap-3 text-muted-foreground">
                  <AlertTriangle size={18} className="text-amber-500" />
                  <p className="text-xs font-bold leading-tight">
-                    {language === 'ar' ? "يرجى الحذر عند التعامل. التقوا دائماً في أماكن عامة." : "Please be careful when dealing. Always meet in public places."}
+                    {t("post.safetyWarning")}
                  </p>
               </div>
            </div>
@@ -252,7 +253,7 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
            <div className="space-y-6">
               <div className="flex items-center justify-between px-4">
                 <h3 className="text-xl font-black tracking-tight">
-                   {language === 'ar' ? "نتائج مطابقة" : "Potential Matches"}
+                   {t("post.potentialMatches")}
                 </h3>
                 {matchingLoading && <Loader2 className="animate-spin text-primary" size={16} />}
               </div>

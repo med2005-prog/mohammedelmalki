@@ -50,7 +50,7 @@ export default function BusinessDashboard() {
     );
   }
 
-  if (!user || !user.isBusiness) {
+  if (!user || user.role !== "partner") {
     return (
       <div className="flex flex-col h-screen items-center justify-center space-y-4" dir={dir}>
         <h2 className="text-2xl font-bold">{t("dash.accessDenied")}</h2>
@@ -148,10 +148,10 @@ export default function BusinessDashboard() {
                 <table className="w-full text-left" dir={dir}>
                   <thead className="bg-secondary/50 text-xs font-black uppercase text-muted-foreground">
                     <tr>
-                      <th className={cn("px-6 py-4", dir === 'rtl' ? 'text-right' : 'text-left')}>{language === 'ar' ? 'العنوان' : 'Title'}</th>
-                      <th className={cn("px-6 py-4", dir === 'rtl' ? 'text-right' : 'text-left')}>{language === 'ar' ? 'المشاهدات' : 'Views'}</th>
-                      <th className={cn("px-6 py-4", dir === 'rtl' ? 'text-right' : 'text-left')}>{language === 'ar' ? 'الحالة' : 'Status'}</th>
-                      <th className={cn("px-6 py-4", dir === 'rtl' ? 'text-left' : 'text-right')}>{language === 'ar' ? 'الإجراءات' : 'Actions'}</th>
+                      <th className={cn("px-6 py-4", dir === 'rtl' ? 'text-right' : 'text-left')}>{t("common.title")}</th>
+                      <th className={cn("px-6 py-4", dir === 'rtl' ? 'text-right' : 'text-left')}>{t("form.views")}</th>
+                      <th className={cn("px-6 py-4", dir === 'rtl' ? 'text-right' : 'text-left')}>{t("form.status")}</th>
+                      <th className={cn("px-6 py-4", dir === 'rtl' ? 'text-left' : 'text-right')}>{t("common.actions")}</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-border/50">
@@ -164,7 +164,7 @@ export default function BusinessDashboard() {
                             "px-2 py-1 rounded-md text-[10px] font-black uppercase",
                             post.status === "active" ? "bg-green-500/10 text-green-600" : "bg-blue-500/10 text-blue-600"
                           )}>
-                            {post.status === 'active' ? (language === 'ar' ? 'نشط' : 'Active') : (language === 'ar' ? 'مكتمل' : 'Resolved')}
+                            {post.status === 'active' ? t("common.active") : t("common.resolved")}
                           </span>
                         </td>
                         <td className={cn("px-6 py-4", dir === 'rtl' ? 'text-left' : 'text-right')}>

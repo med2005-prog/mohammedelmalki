@@ -7,10 +7,10 @@ export async function GET(req: Request) {
     await connectToDatabase();
     const { searchParams } = new URL(req.url);
     
-    const isBusiness = searchParams.get("isBusiness");
+    const role = searchParams.get("role");
     const query: any = {};
     
-    if (isBusiness === "true") query.isBusiness = true;
+    if (role) query.role = role;
 
     const users = await User.find(query).select("-password");
 

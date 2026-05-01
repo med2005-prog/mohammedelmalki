@@ -1,5 +1,5 @@
 "use client";
-
+import { useState, useEffect } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { 
   Laptop, 
@@ -15,21 +15,33 @@ import {
   Car,
   Gift,
   ChevronRight,
-  Search
+  Search,
+  Loader2
 } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
 export default function CategoriesPage() {
   const { t, dir, language } = useLanguage();
+  const [counts, setCounts] = useState<Record<string, number>>({});
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/posts/category-counts")
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) setCounts(data.data);
+      })
+      .finally(() => setLoading(false));
+  }, []);
 
   const categories = [
-    { name: t("cat.electronics"), icon: Laptop, slug: "electronics", count: 124, color: "text-blue-500 bg-blue-500/10" },
-    { name: t("cat.wallets"), icon: Wallet, slug: "wallets", count: 86, color: "text-amber-500 bg-amber-500/10" },
-    { name: t("cat.keys"), icon: Key, slug: "keys", count: 53, color: "text-emerald-500 bg-emerald-500/10" },
-    { name: t("cat.pets"), icon: Dog, slug: "pets", count: 42, color: "text-orange-500 bg-orange-500/10" },
-    { name: t("cat.bags"), icon: Briefcase, slug: "bags", count: 38, color: "text-purple-500 bg-purple-500/10" },
-    { name: t("cat.other"), icon: Gift, slug: "other", count: 22, color: "text-gray-500 bg-gray-500/10" },
+    { name: t("cat.electronics"), icon: Laptop, slug: "electronics", color: "text-blue-500 bg-blue-500/10" },
+    { name: t("cat.wallets"), icon: Wallet, slug: "wallets", color: "text-amber-500 bg-amber-500/10" },
+    { name: t("cat.keys"), icon: Key, slug: "keys", color: "text-emerald-500 bg-emerald-500/10" },
+    { name: t("cat.pets"), icon: Dog, slug: "pets", color: "text-orange-500 bg-orange-500/10" },
+    { name: t("cat.bags"), icon: Briefcase, slug: "bags", color: "text-purple-500 bg-purple-500/10" },
+    { name: t("cat.other"), icon: Gift, slug: "other", color: "text-gray-500 bg-gray-500/10" },
   ];
 
   return (
@@ -40,11 +52,7 @@ export default function CategoriesPage() {
             {t("sidebar.categories")}
          </h1>
          <p className="text-lg text-muted-foreground font-medium">
-            {language === 'ar' 
-              ? "اختر فئة للعثور على العناصر المفقودة أو المبلغ عنها بشكل أسرع." 
-              : language === 'fr'
-              ? "Choisissez une catégorie pour trouver plus rapidement les objets perdus ou signalés."
-              : "Choose a category to find lost or reported items faster. Our smart filters help narrow down your search."}
+            {t("cat.subtitle")}
          </p>
       </div>
 
@@ -80,7 +88,11 @@ export default function CategoriesPage() {
              </div>
              <h3 className="font-black text-lg mb-2 group-hover:text-primary transition-colors">{cat.name}</h3>
              <div className="flex items-center gap-2 text-xs font-bold text-muted-foreground uppercase tracking-widest">
-                <span>{cat.count} {t("nav.home")}</span>
+                {loading ? (
+                  <Loader2 size={12} className="animate-spin" />
+                ) : (
+                  <span>{counts[cat.slug] || 0} {t("cat.foundCount")}</span>
+                )}
                 <ChevronRight size={14} className={cn("transition-transform group-hover:translate-x-1", dir === 'rtl' ? "rotate-180 group-hover:-translate-x-1" : "")} />
              </div>
            </Link>
@@ -91,12 +103,10 @@ export default function CategoriesPage() {
       <div className="mt-24 p-12 bg-primary/5 rounded-[3rem] border border-primary/10 flex flex-col md:flex-row items-center justify-between gap-8">
          <div className="max-w-md">
             <h2 className="text-2xl font-black mb-4">
-              {language === 'ar' ? "لم تجد ما تبحث عنه؟" : "Can't find a specific category?"}
+              {t("cat.helpTitle")}
             </h2>
             <p className="text-muted-foreground font-medium">
-               {language === 'ar' 
-                 ? "تستخدم خوارزمية المطابقة لدينا أيضاً الذكاء الاصطناعي لمسح أوصاف العناصر، لذلك حتى لو اخترت \"أخرى\"، فسنظل نجد أفضل التطابقات."
-                 : "Our matching algorithm also uses AI to scan item descriptions, so even if you choose \"Other\", we'll still find the best matches."}
+               {t("cat.helpDesc")}
             </p>
          </div>
          <Link 

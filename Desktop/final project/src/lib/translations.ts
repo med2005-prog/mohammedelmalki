@@ -72,6 +72,7 @@ export const translations = {
     "post.featured": "FEATURED",
     "post.urgent": "URGENT",
     "post.potentialMatches": "Potential Matches",
+    "post.safetyWarning": "Please be careful when dealing. Always meet in public places.",
 
 
     // Forms
@@ -89,6 +90,8 @@ export const translations = {
     "form.whereFound": "Where did you find it?",
     "form.location": "Location",
     "form.details": "Additional Details",
+    "form.status": "Status",
+    "form.views": "Views",
 
     "form.image": "Upload Image",
     "form.submitLost": "Submit Report",
@@ -250,7 +253,77 @@ export const translations = {
     "myPosts.subtitle": "Manage your reports and boost visibility.",
     "myPosts.loading": "Loading your reports...",
     "myPosts.empty": "No active reports found",
-    "myPosts.emptyDesc": "You haven't reported any lost or found items yet. Your active reports will appear here."
+    "myPosts.emptyDesc": "You haven't reported any lost or found items yet. Your active reports will appear here.",
+    
+    // AI Assistant
+    "ai.name": "Fin Huwa Assistant",
+    "ai.placeholder": "Type your message...",
+    "ai.error": "System error occurred.",
+
+    // Call
+    "call.incoming.video": "Incoming Video Call...",
+    "call.incoming.voice": "Incoming Voice Call...",
+    "call.reject": "Reject",
+    "call.answer": "Answer",
+
+    // Misc
+    "common.locating": "Locating...",
+    "common.save": "Save",
+    "common.cancel": "Cancel",
+    "common.active": "Active",
+    "common.resolved": "Resolved",
+    "common.trustedPartner": "Trusted Partner",
+    "common.sending": "Sending...",
+    "common.voiceMessage": "Voice Message",
+    "common.recordAudio": "Record Audio",
+    "settings.subtitle": "Personalize your account and preferences.",
+    "profile.recentActivity": "Recent Activity",
+    "profile.location": "Agadir, Morocco",
+    "msg.deleteConfirm": "Are you sure you want to delete this conversation?",
+    "msg.deleteBtn": "Delete Conversation",
+    "msg.sending": "Sending...",
+    "edit.title": "Edit Post",
+    "edit.save": "Save Changes",
+    "fav.empty": "Your collection is empty",
+    "fav.browse": "Browse Feed",
+    "fav.loading": "Loading your favorites...",
+    
+    // Additional Boost
+    "boost.activated": "Boost activated successfully! 🎉",
+    "boost.canceled": "Payment was canceled.",
+    "boost.heroTitle": "Boost Your Post & Recover Faster",
+    "boost.monthly": "Monthly",
+    "boost.yearly": "Yearly",
+    "boost.save20": "Save 20%",
+    "boost.dhPerYear": "DH / yr",
+    "boost.dhPerMonth": "DH / mo",
+    "boost.chooseToBoost": "Choose a post to boost",
+    "boost.securePayment": "Secure Payment · Money Back Guarantee",
+
+    // Business Page Extras
+    "biz.activeCommunity": "Active Community Members",
+    "biz.topContributors": "Top contributors who helped return items to their owners.",
+    "biz.verifiedMember": "Verified Member",
+    "biz.helps": "Helps",
+
+    // Common Extras
+    "common.agadirMorocco": "Agadir, Morocco",
+    "common.agadir": "Agadir",
+    "common.morocco": "Morocco",
+    "common.failedImageUpload": "Failed to upload image",
+    "common.clickToUpload": "Click to upload image",
+    "common.pageNotFound": "Page Not Found",
+    "common.goBack": "Go Back",
+    "common.memberSinceShort": "Member since ",
+    "common.actions": "Actions",
+    "common.title": "Title",
+
+    // Terms & Privacy
+    "legal.terms.title": "Terms of Use",
+    "legal.privacy.title": "Privacy Policy",
+    "legal.terms.desc": "Please read these terms carefully before using Fin Huwa.",
+    "legal.privacy.desc": "We value your privacy and protect your personal data.",
+    "legal.lastUpdated": "Last Updated: May 2026"
   },
   fr: {
     // Navigation
@@ -322,7 +395,8 @@ export const translations = {
     "post.delete": "Supprimer",
     "post.featured": "À LA UNE",
     "post.urgent": "URGENT",
-    "post.potentialMatches": "Correspondances Potentielles",
+    "post.potentialMatches": "Correspondances potentielles",
+    "post.safetyWarning": "Soyez prudent lors de vos transactions. Rencontrez-vous toujours dans des lieux publics.",
 
 
     // Forms
@@ -340,6 +414,8 @@ export const translations = {
     "form.whereFound": "Où l'avez-vous trouvé ?",
     "form.location": "Emplacement",
     "form.details": "Détails supplémentaires",
+    "form.status": "Statut",
+    "form.views": "Vues",
 
     "form.image": "Télécharger une image",
     "form.submitLost": "Soumettre",
@@ -500,7 +576,77 @@ export const translations = {
     "myPosts.subtitle": "Gérez vos rapports et boostez votre visibilité.",
     "myPosts.loading": "Chargement de vos rapports...",
     "myPosts.empty": "Aucun rapport actif trouvé",
-    "myPosts.emptyDesc": "Vous n'avez pas encore signalé d'objets. Vos rapports actifs apparaîtront ici."
+    "myPosts.emptyDesc": "Vous n'avez pas encore signalé d'objets. Vos rapports actifs apparaîtront ici.",
+
+    // AI Assistant
+    "ai.name": "Assistant Fin Huwa",
+    "ai.placeholder": "Écrivez votre message...",
+    "ai.error": "Une erreur système est survenue.",
+
+    // Call
+    "call.incoming.video": "Appel Vidéo Entrant...",
+    "call.incoming.voice": "Appel Vocal Entrant...",
+    "call.reject": "Refuser",
+    "call.answer": "Répondre",
+
+    // Misc
+    "common.locating": "Localisation...",
+    "common.save": "Enregistrer",
+    "common.cancel": "Annuler",
+    "common.active": "Actif",
+    "common.resolved": "Résolu",
+    "common.trustedPartner": "Partenaire de confiance",
+    "common.sending": "Envoi...",
+    "common.voiceMessage": "Message vocal",
+    "common.recordAudio": "Enregistrer l'audio",
+    "settings.subtitle": "Personnalisez votre compte et vos préférences.",
+    "profile.recentActivity": "Activité récente",
+    "profile.location": "Agadir, Maroc",
+    "msg.deleteConfirm": "Êtes-vous sûr de vouloir supprimer cette conversation ?",
+    "msg.deleteBtn": "Supprimer la conversation",
+    "msg.sending": "Envoi...",
+    "edit.title": "Modifier le message",
+    "edit.save": "Enregistrer les modifications",
+    "fav.empty": "Votre collection est vide",
+    "fav.browse": "Parcourir le flux",
+    "fav.loading": "Chargement de vos favoris...",
+
+    // Additional Boost
+    "boost.activated": "Boost activé avec succès ! 🎉",
+    "boost.canceled": "Le paiement a été annulé.",
+    "boost.heroTitle": "Boostez votre annonce et récupérez plus vite",
+    "boost.monthly": "Mensuel",
+    "boost.yearly": "Annuel",
+    "boost.save20": "Économisez 20%",
+    "boost.dhPerYear": "DH / an",
+    "boost.dhPerMonth": "DH / mois",
+    "boost.chooseToBoost": "Choisissez une annonce à booster",
+    "boost.securePayment": "Paiement sécurisé · Garantie satisfait ou remboursé",
+
+    // Business Page Extras
+    "biz.activeCommunity": "Membres actifs de la communauté",
+    "biz.topContributors": "Meilleurs contributeurs ayant aidé à rendre des objets.",
+    "biz.verifiedMember": "Membre vérifié",
+    "biz.helps": "Aides",
+
+    // Common Extras
+    "common.agadirMorocco": "Agadir, Maroc",
+    "common.agadir": "Agadir",
+    "common.morocco": "Maroc",
+    "common.failedImageUpload": "Échec du téléchargement de l'image",
+    "common.clickToUpload": "Cliquez pour télécharger l'image",
+    "common.pageNotFound": "Page non trouvée",
+    "common.goBack": "Retourner",
+    "common.memberSinceShort": "Membre depuis ",
+    "common.actions": "Actions",
+    "common.title": "Titre",
+
+    // Terms & Privacy
+    "legal.terms.title": "Conditions d'utilisation",
+    "legal.privacy.title": "Politique de confidentialité",
+    "legal.terms.desc": "Veuillez lire attentivement ces conditions avant d'utiliser Fin Huwa.",
+    "legal.privacy.desc": "Nous apprécions votre vie privée et protégeons vos données personnelles.",
+    "legal.lastUpdated": "Dernière mise à jour : Mai 2026"
   },
   ar: {
     // Navigation
@@ -572,7 +718,8 @@ export const translations = {
     "post.delete": "حذف",
     "post.featured": "متميز",
     "post.urgent": "عاجل",
-    "post.potentialMatches": "مطابقات محتملة",
+    "post.potentialMatches": "نتائج مطابقة",
+    "post.safetyWarning": "يرجى الحذر عند التعامل. التقوا دائماً في أماكن عامة.",
 
 
     // Forms
@@ -590,6 +737,8 @@ export const translations = {
     "form.whereFound": "أين وجدته؟",
     "form.location": "الموقع",
     "form.details": "تفاصيل إضافية",
+    "form.status": "الحالة",
+    "form.views": "المشاهدات",
 
     "form.image": "رفع صورة",
     "form.submitLost": "إرسال البلاغ",
@@ -750,6 +899,76 @@ export const translations = {
     "myPosts.subtitle": "إدارة تقاريرك وزيادة فرص العثور على أغراضك.",
     "myPosts.loading": "جاري تحميل تقاريرك...",
     "myPosts.empty": "لا توجد بلاغات نشطة",
-    "myPosts.emptyDesc": "لم تقم بالإبلاغ عن أي عناصر مفقودة أو معثور عليها بعد. بلاغاتك النشطة ستظهر هنا."
+    "myPosts.emptyDesc": "لم تقم بالإبلاغ عن أي عناصر مفقودة أو معثور عليها بعد. بلاغاتك النشطة ستظهر هنا.",
+
+    // AI Assistant
+    "ai.name": "مساعد Fin Huwa",
+    "ai.placeholder": "اكتب رسالتك...",
+    "ai.error": "حدث خطأ في النظام.",
+
+    // Call
+    "call.incoming.video": "مكالمة فيديو واردة...",
+    "call.incoming.voice": "مكالمة صوتية واردة...",
+    "call.reject": "رفض",
+    "call.answer": "رد",
+
+    // Misc
+    "common.locating": "جاري التحديد...",
+    "common.save": "حفظ",
+    "common.cancel": "إلغاء",
+    "common.active": "نشط",
+    "common.resolved": "مكتمل",
+    "common.trustedPartner": "شريك موثوق",
+    "common.sending": "جاري الإرسال...",
+    "common.voiceMessage": "رسالة صوتية",
+    "common.recordAudio": "تسجيل صوتي",
+    "settings.subtitle": "قم بتخصيص حسابك وتفضيلاتك.",
+    "profile.recentActivity": "النشاط الأخير",
+    "profile.location": "أكادير، المغرب",
+    "msg.deleteConfirm": "هل أنت متأكد من حذف هذه المحادثة؟",
+    "msg.deleteBtn": "حذف المحادثة",
+    "msg.sending": "جاري الإرسال...",
+    "edit.title": "تعديل المنشور",
+    "edit.save": "حفظ التغييرات",
+    "fav.empty": "مجموعتك فارغة",
+    "fav.browse": "تصفح الإعلانات",
+    "fav.loading": "جاري تحميل المفضلة...",
+
+    // Additional Boost
+    "boost.activated": "تم تفعيل الترويج بنجاح! 🎉",
+    "boost.canceled": "تم إلغاء عملية الدفع.",
+    "boost.heroTitle": "رَوّج إعلانك وضاعف فرص الاسترجاع",
+    "boost.monthly": "شهري",
+    "boost.yearly": "سنوي",
+    "boost.save20": "وفر 20%",
+    "boost.dhPerYear": "درهم / سنة",
+    "boost.dhPerMonth": "درهم / شهر",
+    "boost.chooseToBoost": "اختر إعلاناً لترويجه",
+    "boost.securePayment": "دفع آمن · ضمان استرجاع",
+
+    // Business Page Extras
+    "biz.activeCommunity": "أعضاء المجتمع النشطون",
+    "biz.topContributors": "مستخدمون متميزون ساعدوا في إرجاع الأغراض لأصحابها.",
+    "biz.verifiedMember": "عضو موثق",
+    "biz.helps": "مساعدة",
+
+    // Common Extras
+    "common.agadirMorocco": "أكادير، المغرب",
+    "common.agadir": "أكادير",
+    "common.morocco": "المغرب",
+    "common.failedImageUpload": "فشل رفع الصورة",
+    "common.clickToUpload": "اضغط لرفع الصورة",
+    "common.pageNotFound": "الصفحة غير موجودة",
+    "common.goBack": "العودة للخلف",
+    "common.memberSinceShort": "عضو منذ ",
+    "common.actions": "الإجراءات",
+    "common.title": "العنوان",
+
+    // Terms & Privacy
+    "legal.terms.title": "شروط الاستخدام",
+    "legal.privacy.title": "سياسة الخصوصية",
+    "legal.terms.desc": "يرجى قراءة هذه الشروط بعناية قبل استخدام Fin Huwa.",
+    "legal.privacy.desc": "نحن نقدر خصوصيتك ونحمي بياناتك الشخصية.",
+    "legal.lastUpdated": "آخر تحديث: مايو 2026"
   }
 };

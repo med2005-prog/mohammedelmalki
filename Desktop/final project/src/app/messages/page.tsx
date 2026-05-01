@@ -107,7 +107,7 @@ export default function MessagesPage() {
   }, [activeChat]);
 
   const handleDeleteConversation = async () => {
-    if (!activeChat || !confirm(language === 'ar' ? "هل أنت متأكد من حذف هذه المحادثة؟" : "Are you sure you want to delete this conversation?")) return;
+    if (!activeChat || !confirm(t("msg.deleteConfirm"))) return;
     
     try {
       const res = await fetch(`/api/conversations?id=${activeChat._id}`, {
@@ -421,12 +421,23 @@ export default function MessagesPage() {
                         </div>
                       )}
 
-                      <span className={cn(
-                        "text-[10px] mt-1 block",
-                        msg.sender === user?._id ? "text-primary-foreground/70" : "text-muted-foreground"
-                      )}>
-                        {new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                      </span>
+                      <div className="flex items-center justify-between gap-4 mt-1">
+                        <span className={cn(
+                          "text-[10px] block",
+                          msg.sender === user?._id ? "text-primary-foreground/70" : "text-muted-foreground"
+                        )}>
+                          {new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        </span>
+                        
+                        {msg.sending && (
+                          <div className="flex items-center gap-1">
+                             <Loader2 size={10} className="animate-spin" />
+                             <span className="text-[10px] opacity-70">
+                                {language === 'ar' ? "جاري الإرسال..." : "Sending..."}
+                             </span>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
                 ))

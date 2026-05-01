@@ -120,7 +120,7 @@ export function VoiceRecorder({ onSend, onCancel }: VoiceRecorderProps) {
             {isPlaying ? <Pause size={20} fill="currentColor" /> : <Play size={20} fill="currentColor" />}
           </button>
           <div className="flex-1 text-xs font-bold text-muted-foreground">
-            {language === 'ar' ? "رسالة صوتية" : language === 'fr' ? "Message vocal" : "Audio Message"} ({formatTime(recordingTime)})
+            {t("common.voiceMessage")} ({formatTime(recordingTime)})
           </div>
           <button onClick={() => { setAudioBlob(null); onCancel(); }} className="p-2 text-muted-foreground hover:text-destructive">
             <Trash2 size={18} />
@@ -129,7 +129,7 @@ export function VoiceRecorder({ onSend, onCancel }: VoiceRecorderProps) {
             onClick={() => onSend(audioBlob)}
             className="bg-primary text-white px-4 py-1.5 rounded-full text-xs font-black shadow-lg shadow-primary/20"
           >
-            {language === 'ar' ? "إرسال" : language === 'fr' ? "Envoyer" : "Send"}
+            {t("common.sending")}
           </button>
         </>
       ) : (

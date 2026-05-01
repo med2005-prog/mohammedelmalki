@@ -14,89 +14,60 @@ type PlanId = "starter" | "basic" | "standard" | "pro" | "premium";
 
 const PLANS = [
   {
-    id: "starter" as PlanId,
-    name: { en: "Starter", fr: "Débutant", ar: "المبتدئ" },
-    price: 0,
-    duration: { en: "12 hours", fr: "12 heures", ar: "12 ساعة" },
-    visibility: "×2",
-    freeLabel: { en: "One-time", fr: "Une fois", ar: "مرة واحدة" },
-    features: {
-      en: ["2× Visibility", "Higher in list"],
-      fr: ["2× Visibilité", "Plus haut dans la liste"],
-      ar: ["ضعف الظهور", "يظهر أعلى في القائمة"]
-    },
-    icon: Zap,
-    gradient: "from-emerald-400 to-teal-500",
-  },
-  {
     id: "basic" as PlanId,
     name: { en: "Basic", fr: "Basique", ar: "الأساسي" },
-    price: 10,
-    duration: { en: "24 hours", fr: "24 heures", ar: "24 ساعة" },
-    visibility: "×3",
+    yearlyPrice: 64,
+    monthlyPrice: "8",
     features: {
-      en: ["3× Visibility", "Top search results"],
-      fr: ["3× Visibilité", "Résultats de recherche"],
-      ar: ["3× الظهور", "أعلى في نتائج البحث"]
+      en: ["3x Visibility", "Basic Badge"],
+      fr: ["3x Visibilité", "Badge Basique"],
+      ar: ["ظهور 3x", "شارة أساسية"]
     },
-    icon: Sparkles,
-    gradient: "from-blue-400 to-indigo-500",
+    topBg: "bg-zinc-100",
   },
   {
     id: "standard" as PlanId,
     name: { en: "Standard", fr: "Standard", ar: "القياسي" },
-    price: 25,
-    duration: { en: "3 days", fr: "3 jours", ar: "3 أيام" },
-    visibility: "×6",
-    popular: true,
-    badge: "Featured",
-    badgeColor: "bg-primary text-white",
+    yearlyPrice: 144,
+    monthlyPrice: "15",
     features: {
-      en: ["6× Visibility", "Top of list", "Featured badge"],
-      fr: ["6× Visibilité", "Haut de liste", "Badge Sponsorisé"],
-      ar: ["6× الظهور", "قمة القائمة", 'شارة "مميز"']
+      en: ["6x Visibility", "Top of list", '"Featured" Badge'],
+      fr: ["6x Visibilité", "Haut de liste", 'Badge "Sponsorisé"'],
+      ar: ["ظهور 6x", "قمة القائمة", 'شارة "مميز"']
     },
-    icon: Star,
-    gradient: "from-primary to-blue-600",
+    topBg: "bg-zinc-100",
   },
   {
     id: "pro" as PlanId,
-    name: { en: "Pro", fr: "Pro", ar: "الاحترافي" },
-    price: 40,
-    duration: { en: "5 days", fr: "5 jours", ar: "5 أيام" },
-    visibility: "×8",
-    badge: "Featured",
-    badgeColor: "bg-violet-600 text-white",
+    name: { en: "Professional", fr: "Professionnel", ar: "الاحترافي" },
+    yearlyPrice: 240,
+    monthlyPrice: "25",
+    popular: true,
     features: {
-      en: ["8× Visibility", "Priority listing", "Featured badge", "City notifications"],
-      fr: ["8× Visibilité", "Liste prioritaire", "Badge Sponsorisé", "Notifications ville"],
-      ar: ["8× الظهور", "قائمة أولوية", 'شارة "مميز"', "إشعار لمستخدمي مدينتك"]
+      en: ["8x Visibility", "City Notifications", "Priority Support"],
+      fr: ["8x Visibilité", "Notifications Ville", "Support Prioritaire"],
+      ar: ["ظهور 8x", "إشعارات للمدينة", "دعم أولوية"]
     },
-    icon: Rocket,
-    gradient: "from-violet-500 to-purple-600",
+    topBg: "bg-gradient-to-br from-blue-100 to-indigo-100",
   },
   {
     id: "premium" as PlanId,
     name: { en: "Premium", fr: "Premium", ar: "البريميوم" },
-    price: 60,
-    duration: { en: "7 days", fr: "7 jours", ar: "7 أيام" },
-    visibility: "×10",
-    crown: true,
-    badge: "Urgent",
-    badgeColor: "bg-amber-500 text-white",
+    yearlyPrice: 360,
+    monthlyPrice: "37",
     features: {
-      en: ["10× Visibility", "Top of home page", "Featured & Urgent badges", "Social media promotion"],
-      fr: ["10× Visibilité", "Haut de page d'accueil", "Badges Sponsorisé & Urgent", "Promotion RS"],
-      ar: ["10× الظهور", "قمة الصفحة الرئيسية", 'شارتا "مميز" و"عاجل"', "إشعارات المدينة", "ترويج على التواصل الاجتماعي"]
+      en: ["12x Visibility", "Full Prominence", "VIP Support"],
+      fr: ["12x Visibilité", "Mise en avant totale", "Support VIP"],
+      ar: ["ظهور 12x", "تصدر شامل", "دعم VIP"]
     },
-    icon: Crown,
-    gradient: "from-amber-400 to-orange-500",
+    topBg: "bg-zinc-100",
   },
 ];
 
 export default function BoostPage() {
   const { t, dir, language } = useLanguage();
   const [selected, setSelected] = useState<PlanId>("standard");
+  const [isYearly, setIsYearly] = useState(false);
   const router = useRouter();
   const selectedPlan = PLANS.find((p) => p.id === selected)!;
   const lang = language as "en" | "fr" | "ar";
@@ -105,83 +76,108 @@ export default function BoostPage() {
     <div className="max-w-6xl mx-auto py-12 px-4 space-y-12" dir={dir}>
       {/* Header */}
       <div className="text-center space-y-4">
-        <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest">
-          <Rocket size={14} /> {t("boost.title")}
+        <div className="inline-flex items-center gap-2 bg-primary/5 text-primary px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest border border-primary/10">
+          {t("boost.title")}
         </div>
-        <h1 className="text-4xl sm:text-5xl font-black tracking-tight">
-           {language === 'ar' ? "🚀 رَوّج إعلانك وزيد فرص الاسترجاع" : "🚀 Boost Your Post & Recover Faster"}
+        <h1 className="text-4xl sm:text-5xl font-black tracking-tight text-zinc-900">
+           {t("boost.heroTitle")}
         </h1>
         <p className="text-muted-foreground text-xl max-w-2xl mx-auto">
           {t("boost.subtitle")}
         </p>
+
+        {/* Toggle Switch */}
+        <div className="flex justify-center mt-8 mb-6">
+          <div className="bg-zinc-100 p-1 rounded-full flex items-center relative">
+            <button
+              onClick={() => setIsYearly(false)}
+              className={cn(
+                "relative z-10 px-6 py-2.5 rounded-full text-sm font-bold transition-all duration-300",
+                !isYearly ? "text-zinc-900" : "text-zinc-500 hover:text-zinc-700"
+              )}
+            >
+              {t("boost.monthly")}
+            </button>
+            <button
+              onClick={() => setIsYearly(true)}
+              className={cn(
+                "relative z-10 px-6 py-2.5 rounded-full text-sm font-bold transition-all duration-300 flex items-center gap-2",
+                isYearly ? "text-zinc-900" : "text-zinc-500 hover:text-zinc-700"
+              )}
+            >
+              {t("boost.yearly")}
+              <span className="bg-emerald-100 text-emerald-700 text-[10px] px-2 py-0.5 rounded-full font-bold">
+                {t("boost.save20")}
+              </span>
+            </button>
+            <div
+              className={cn(
+                "absolute top-1 bottom-1 bg-white rounded-full shadow-sm transition-all duration-300 ease-in-out",
+                isYearly ? (dir === 'rtl' ? "left-1 right-[50%]" : "right-1 left-[50%]") : (dir === 'rtl' ? "left-[50%] right-1" : "right-[50%] left-1")
+              )}
+            />
+          </div>
+        </div>
       </div>
 
       {/* Plan cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {PLANS.map((plan) => {
-          const Icon = plan.icon;
           const isSelected = selected === plan.id;
           return (
             <motion.div
               key={plan.id}
-              whileHover={{ y: -6 }}
-              whileTap={{ scale: 0.97 }}
+              whileHover={{ y: -4 }}
               onClick={() => setSelected(plan.id)}
               className={cn(
-                "relative flex flex-col p-5 rounded-3xl border-2 cursor-pointer transition-all duration-200 group",
+                "relative flex flex-col p-2.5 rounded-[2rem] border-2 cursor-pointer transition-all duration-200 bg-white shadow-sm",
                 isSelected
-                  ? "border-primary shadow-2xl shadow-primary/15 bg-primary/[0.03]"
-                  : "border-border bg-background hover:border-primary/40",
-                plan.popular && !isSelected && "border-primary/30 shadow-lg"
+                  ? "border-zinc-900 shadow-xl"
+                  : "border-transparent hover:border-zinc-200"
               )}
             >
-              {plan.popular && (
-                <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-primary text-white text-[9px] font-black px-3 py-1 rounded-full tracking-widest shadow-lg whitespace-nowrap">
-                   {t("boost.popular")}
-                </span>
-              )}
-              {plan.crown && (
-                <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-amber-500 text-white text-[9px] font-black px-3 py-1 rounded-full tracking-widest shadow-lg whitespace-nowrap">
-                   {language === 'ar' ? "👑 الأفضل" : "👑 Best"}
-                </span>
-              )}
-
-              <div className={cn("w-11 h-11 rounded-2xl flex items-center justify-center mb-4 text-white bg-gradient-to-br transition-transform group-hover:scale-110", plan.gradient)}>
-                <Icon size={20} />
-              </div>
-
-              <div className="mb-4">
-                <h3 className="font-black text-base">{plan.name[lang]}</h3>
-                <div className="flex items-baseline gap-1 mt-0.5">
-                  {plan.id === "starter" ? (
-                    <span className="text-xl font-black text-emerald-600">
-                      {language === 'ar' ? "مجاناً" : "FREE"}
-                    </span>
-                  ) : (
-                    <>
-                      <span className="text-xl font-black">{plan.price}</span>
-                      <span className="text-xs font-bold text-muted-foreground">DH</span>
-                    </>
-                  )}
+              {/* Top Section */}
+              <div className={cn("rounded-[1.5rem] p-6 mb-2 flex flex-col", plan.topBg)}>
+                <div className="bg-white/90 backdrop-blur-sm w-fit px-4 py-1.5 rounded-full text-[11px] font-black mb-4 uppercase tracking-wider text-zinc-900 shadow-sm border border-zinc-200/50">
+                  {plan.name[lang]}
                 </div>
-                <p className="text-[10px] text-muted-foreground font-semibold mt-0.5">
-                  {plan.duration[lang]} · {plan.visibility}
-                </p>
+                <div className="flex items-end gap-1.5 mt-2 flex-wrap">
+                  <span className="text-4xl sm:text-5xl font-black text-zinc-900 leading-none">
+                    {isYearly ? plan.yearlyPrice : plan.monthlyPrice.replace("~", "")}
+                  </span>
+                  <span className="text-sm font-bold text-zinc-500 mb-1">
+                    {isYearly ? t("boost.dhPerYear") : t("boost.dhPerMonth")}
+                  </span>
+                </div>
+                {isYearly && (
+                  <p className="text-xs font-bold text-zinc-400 mt-3">
+                    ~{Math.round(plan.yearlyPrice / 12)} {t("boost.dhPerMonth")}
+                  </p>
+                )}
               </div>
 
-              <ul className="space-y-1.5 flex-1 mb-4">
-                {plan.features[lang].map((f) => (
-                  <li key={f} className="flex items-start gap-2 text-[11px] font-medium">
-                    <div className="w-3.5 h-3.5 rounded-full bg-green-500/15 text-green-500 flex items-center justify-center shrink-0 mt-0.5">
-                      <Check size={8} strokeWidth={3.5} />
-                    </div>
-                    {f}
-                  </li>
-                ))}
-              </ul>
-
-              <div className={cn("w-full py-2 rounded-xl text-xs font-black text-center transition-all", isSelected ? "bg-primary text-white shadow-md shadow-primary/20" : "bg-secondary text-muted-foreground")}>
+              {/* Button */}
+              <button
+                className={cn(
+                  "w-[calc(100%-1rem)] mx-auto rounded-full py-4 px-6 font-bold mt-2 mb-6 transition-all text-sm sm:text-base",
+                  isSelected
+                    ? "bg-zinc-900 text-white shadow-md shadow-zinc-900/20"
+                    : "bg-zinc-900 text-white hover:bg-zinc-800"
+                )}
+              >
                 {isSelected ? "✓" : t("boost.choose")}
+              </button>
+
+              {/* Features */}
+              <div className="px-5 pb-5 flex-1">
+                <ul className="space-y-3.5">
+                  {plan.features[lang].map((f) => (
+                    <li key={f} className="flex items-center gap-3 text-sm font-semibold text-zinc-600">
+                      <Check size={16} className="text-zinc-300 shrink-0" strokeWidth={3} />
+                      {f}
+                    </li>
+                  ))}
+                </ul>
               </div>
             </motion.div>
           );
@@ -192,16 +188,15 @@ export default function BoostPage() {
       <div className="max-w-xl mx-auto space-y-4 text-center">
         <button
           onClick={() => router.push("/my-posts")}
-          className="w-full flex items-center justify-center gap-3 font-black py-4 px-8 rounded-2xl text-lg transition-all shadow-xl bg-gradient-to-l from-primary to-blue-600 text-white shadow-primary/25 hover:opacity-90"
+          className="w-full flex items-center justify-center gap-3 font-black py-4 px-8 rounded-2xl text-lg transition-all shadow-xl bg-zinc-900 text-white hover:bg-zinc-800 hover:shadow-zinc-900/20 active:scale-[0.98]"
         >
-          <Rocket size={20} />
-          {language === 'ar' ? "اختر إعلاناً لترويجه" : "Choose a post to boost"}
-          <ArrowRight size={18} className={dir === 'rtl' ? "rotate-180" : ""} />
+          {t("boost.chooseToBoost")}
+          <ArrowRight size={20} className={dir === 'rtl' ? "rotate-180" : ""} />
         </button>
 
         <p className="text-center text-xs text-muted-foreground flex items-center justify-center gap-2">
           <ShieldCheck size={13} className="text-green-500" />
-          {language === 'ar' ? "دفع آمن · ضمان استرجاع" : "Secure Payment · Money Back Guarantee"}
+          {t("boost.securePayment")}
         </p>
       </div>
     </div>

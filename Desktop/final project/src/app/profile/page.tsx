@@ -143,7 +143,7 @@ export default function ProfilePage() {
                     ? "bg-primary/10 text-primary"
                     : "bg-green-500/10 text-green-600"
                 )}>
-                  {item.status === 'active' ? (language === 'ar' ? 'نشط' : 'Active') : (language === 'ar' ? 'مكتمل' : 'Resolved')}
+                  {item.status === 'active' ? t("common.active") : t("common.resolved")}
                 </span>
                 <span className="text-xs text-muted-foreground font-medium hidden sm:block">
                   {new Date(item.createdAt).toLocaleDateString(language)}

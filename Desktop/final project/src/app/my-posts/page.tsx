@@ -58,7 +58,7 @@ export default function MyPostsPage() {
         <div>
           <h1 className="text-3xl font-black tracking-tight">{t("nav.myPosts")}</h1>
           <p className="text-muted-foreground mt-1">
-            {language === 'ar' ? "إدارة تقاريرك وزيادة فرص العثور على أغراضك." : "Manage your reports and boost visibility."}
+            {t("myPosts.subtitle")}
           </p>
         </div>
         <Link 

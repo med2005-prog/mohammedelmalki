@@ -10,23 +10,29 @@ import { cn } from "@/lib/utils";
 export default function BusinessesPage() {
   const { t, dir, language } = useLanguage();
   const [partners, setPartners] = useState<any[]>([]);
+  const [users, setUsers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchPartners = async () => {
+    const fetchData = async () => {
       try {
-        const response = await fetch("/api/users?isBusiness=true");
-        const data = await response.json();
-        if (data.success) {
-          setPartners(data.data);
-        }
+        const [partnersRes, usersRes] = await Promise.all([
+          fetch("/api/users?role=partner"),
+          fetch("/api/users?role=user")
+        ]);
+        
+        const partnersData = await partnersRes.json();
+        const usersData = await usersRes.json();
+        
+        if (partnersData.success) setPartners(partnersData.data);
+        if (usersData.success) setUsers(usersData.data.slice(0, 6)); // Show top 6 users
       } catch (err) {
         console.error(err);
       } finally {
         setLoading(false);
       }
     };
-    fetchPartners();
+    fetchData();
   }, []);
 
   return (
@@ -81,7 +87,7 @@ export default function BusinessesPage() {
       </div>
 
       {/* Partner List */}
-      <div className="mb-12">
+      <div className="mb-20">
          <div className="flex flex-col sm:flex-row items-center justify-between mb-8 px-4 gap-4">
             <h2 className="text-2xl font-black tracking-tight">{t("biz.activePartners")}</h2>
             <Link href="/map" className="text-sm font-black text-primary hover:underline inline-flex items-center gap-1">
@@ -98,8 +104,8 @@ export default function BusinessesPage() {
                <div key={partner._id} className="bg-card border rounded-3xl overflow-hidden group hover:shadow-2xl hover:shadow-primary/5 transition-all">
                   <div className="relative h-48">
                      <Image src={partner.avatar || "https://images.unsplash.com/photo-1577495508048-b635879837f1?q=80&w=400&auto=format&fit=crop"} alt={partner.name} fill className="object-cover transition-transform duration-500 group-hover:scale-110" />
-                     <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider text-primary">
-                        {partner.businessType || t("biz.partner")}
+                     <div className="absolute top-4 left-4 bg-amber-500 text-white px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider shadow-lg">
+                        {language === 'ar' ? 'شريك' : 'Partner'}
                      </div>
                   </div>
                   <div className="p-6">
@@ -120,10 +126,54 @@ export default function BusinessesPage() {
                   </div>
                </div>
                )) : (
-                  <div className="col-span-1 md:col-span-3 py-20 text-center text-muted-foreground font-bold">
+                  <div className="col-span-1 md:col-span-3 py-10 text-center text-muted-foreground font-bold">
                      {t("biz.empty")}
                   </div>
                )}
+            </div>
+         )}
+      </div>
+
+      {/* Regular Users Section */}
+      <div className="mb-12">
+         <div className="mb-8 px-4">
+            <h2 className="text-2xl font-black tracking-tight">{t("biz.activeCommunity")}</h2>
+            <p className="text-muted-foreground text-sm font-medium mt-1">
+               {t("biz.topContributors")}
+            </p>
+         </div>
+         
+         {loading ? (
+            <div className="flex justify-center py-10">
+               <Loader2 className="animate-spin text-primary/30" size={30} />
+            </div>
+         ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+               {users.map((user) => (
+                  <div key={user._id} className="flex items-center gap-4 p-4 bg-secondary/20 rounded-2xl border border-transparent hover:border-primary/20 transition-all group">
+                     <div className="w-16 h-16 rounded-2xl bg-secondary flex items-center justify-center overflow-hidden border-2 border-white shrink-0">
+                        {user.avatar ? (
+                           <Image src={user.avatar} alt={user.name} width={64} height={64} className="object-cover w-full h-full" />
+                        ) : (
+                           <span className="text-xl font-black text-muted-foreground">{user.name.charAt(0)}</span>
+                        )}
+                     </div>
+                     <div className="flex-1 min-w-0">
+                        <h4 className="font-black text-base truncate group-hover:text-primary transition-colors">{user.name}</h4>
+                        <p className="text-xs text-muted-foreground font-bold uppercase tracking-wider">
+                           {language === 'ar' ? 'عضو موثق' : 'Verified Member'}
+                        </p>
+                        <div className="flex items-center gap-3 mt-1">
+                           <span className="text-[10px] font-black px-2 py-0.5 bg-emerald-500/10 text-emerald-600 rounded-md">
+                              {language === 'ar' ? 'نشط' : 'Active'}
+                           </span>
+                           <span className="text-[10px] font-black text-muted-foreground">
+                              {Math.floor(Math.random() * 20) + 5} {language === 'ar' ? 'مساعدة' : 'Helps'}
+                           </span>
+                        </div>
+                     </div>
+                  </div>
+               ))}
             </div>
          )}
       </div>

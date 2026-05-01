@@ -50,7 +50,7 @@ export async function GET(req: Request) {
     // Fetch posts — DB sorts by boostRank desc, then createdAt desc via index
     const posts = await Post.find(filter)
       .sort({ boostRank: -1, createdAt: -1 })
-      .populate("author", "name avatar isVerified")
+      .populate("author", "name avatar isVerified role isPremium")
       .lean();
 
     // Enforce expiry in application layer:
@@ -62,9 +62,19 @@ export async function GET(req: Request) {
     const sortedPosts = posts
       .map((p: any) => {
         const expired = p.boostExpiresAt && new Date(p.boostExpiresAt) < now;
+        const authorRole = p.author?.role || "user";
+        const authorIsPremium = p.author?.isPremium || false;
+        
+        // Base rank from boost
+        let effectiveRank = expired ? 0 : (p.boostRank ?? PLAN_WEIGHTS[p.boostPlan ?? p.boostType ?? ""] ?? 0);
+        
+        // Partner bonus (e.g., +1 to rank)
+        if (authorRole === "partner") effectiveRank += 1;
+        if (authorIsPremium) effectiveRank += 0.5;
+
         return {
           ...p,
-          _effectiveRank: expired ? 0 : (p.boostRank ?? PLAN_WEIGHTS[p.boostPlan ?? p.boostType ?? ""] ?? 0),
+          _effectiveRank: effectiveRank,
         };
       })
       .sort((a: any, b: any) => {

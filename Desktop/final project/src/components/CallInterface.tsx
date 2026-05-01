@@ -44,6 +44,24 @@ export function CallInterface({
   const pc = useRef<RTCPeerConnection | null>(null);
 
   const addedCandidates = useRef<Set<string>>(new Set());
+  
+  const [outgoingRingtone] = useState(() => {
+    if (typeof window !== 'undefined' && !isIncoming) {
+      const audio = new Audio("https://assets.mixkit.co/active_storage/sfx/1350/1350-preview.mp3"); // Outgoing pulse
+      audio.loop = true;
+      return audio;
+    }
+    return null;
+  });
+
+  useEffect(() => {
+    if (status === "calling" && outgoingRingtone && !isIncoming) {
+      outgoingRingtone.play().catch(() => {});
+    } else if (outgoingRingtone) {
+      outgoingRingtone.pause();
+      outgoingRingtone.currentTime = 0;
+    }
+  }, [status, outgoingRingtone, isIncoming]);
 
   // Initialize WebRTC
   useEffect(() => {
@@ -186,7 +204,7 @@ export function CallInterface({
           }
         }
       } catch (err) {}
-    }, 2000);
+    }, 500);
 
     return () => clearInterval(poll);
   }, [callId, status, isIncoming]);
@@ -197,6 +215,13 @@ export function CallInterface({
       remoteVideoRef.current.srcObject = remoteStream;
     }
   }, [remoteStream, status]);
+
+  // Ensure local stream is attached when video is turned on
+  useEffect(() => {
+    if (isVideoOn && localStream && localVideoRef.current) {
+      localVideoRef.current.srcObject = localStream;
+    }
+  }, [isVideoOn, localStream]);
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
@@ -214,9 +239,35 @@ export function CallInterface({
       localStream.getAudioTracks().forEach(track => {
         track.enabled = !isMuted;
       });
-      localStream.getVideoTracks().forEach(track => {
-        track.enabled = isVideoOn;
-      });
+      
+      const videoTracks = localStream.getVideoTracks();
+      if (isVideoOn && videoTracks.length === 0) {
+        // Upgrade to video: fetch video track
+        const upgradeVideo = async () => {
+          try {
+            const videoStream = await navigator.mediaDevices.getUserMedia({ video: true });
+            const videoTrack = videoStream.getVideoTracks()[0];
+            localStream.addTrack(videoTrack);
+            if (pc.current) {
+              pc.current.addTrack(videoTrack, localStream);
+              // Re-negotiate
+              const offer = await pc.current.createOffer();
+              await pc.current.setLocalDescription(offer);
+              // Send new offer... (Simplified for now, standard WebRTC renegotiation)
+            }
+            // Trigger re-render of effect
+            setLocalStream(new MediaStream(localStream.getTracks()));
+          } catch (err) {
+            console.error("Failed to upgrade to video", err);
+            setIsVideoOn(false);
+          }
+        };
+        upgradeVideo();
+      } else {
+        videoTracks.forEach(track => {
+          track.enabled = isVideoOn;
+        });
+      }
     }
   }, [isMuted, isVideoOn, localStream]);
 
@@ -227,9 +278,19 @@ export function CallInterface({
     }
   }, [isSpeaker]);
 
+  // Handle tab close/navigation
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      handleEnd();
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, [callId, localStream]);
+
   const handleEnd = async () => {
     if (callId) {
-      await fetch("/api/calls/respond", {
+      // Don't wait for fetch to update UI
+      fetch("/api/calls/respond", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ callId, status: "ended" })
@@ -238,7 +299,7 @@ export function CallInterface({
     pc.current?.close();
     localStream?.getTracks().forEach(track => track.stop());
     setStatus("ended");
-    setTimeout(onEnd, 1500);
+    setTimeout(onEnd, 300);
   };
 
   const formatDuration = (seconds: number) => {

@@ -23,7 +23,7 @@ export default function AuthPage() {
     name: "",
     email: "",
     password: "",
-    isBusiness: false,
+    role: "user" as "user" | "partner",
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -139,15 +139,15 @@ export default function AuthPage() {
 
             {!isLogin && (
               <div 
-                onClick={() => setFormData({ ...formData, isBusiness: !formData.isBusiness })}
+                onClick={() => setFormData({ ...formData, role: formData.role === 'partner' ? 'user' : 'partner' })}
                 className={cn(
                   "flex items-center gap-4 p-4 rounded-2xl border-2 cursor-pointer transition-all",
-                  formData.isBusiness ? "border-primary bg-primary/5" : "border-border hover:border-primary/30"
+                  formData.role === 'partner' ? "border-primary bg-primary/5" : "border-border hover:border-primary/30"
                 )}
               >
                 <div className={cn(
                   "p-2 rounded-xl transition-colors",
-                  formData.isBusiness ? "bg-primary text-white" : "bg-secondary text-muted-foreground"
+                  formData.role === 'partner' ? "bg-primary text-white" : "bg-secondary text-muted-foreground"
                 )}>
                   <Briefcase size={20} />
                 </div>
@@ -157,9 +157,9 @@ export default function AuthPage() {
                 </div>
                 <div className={cn(
                   "w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all",
-                  formData.isBusiness ? "border-primary bg-primary" : "border-muted"
+                  formData.role === 'partner' ? "border-primary bg-primary" : "border-muted"
                 )}>
-                  {formData.isBusiness && <div className="w-2 h-2 bg-white rounded-full" />}
+                  {formData.role === 'partner' && <div className="w-2 h-2 bg-white rounded-full" />}
                 </div>
               </div>
             )}

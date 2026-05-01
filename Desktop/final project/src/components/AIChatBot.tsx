@@ -78,7 +78,7 @@ export function AIChatBot() {
                   <Sparkles size={20} className="text-white animate-pulse" />
                 </div>
                 <div>
-                  <h3 className="font-black text-sm">{language === 'ar' ? "مساعد RecoverIt" : "RecoverIt Assistant"}</h3>
+                  <h3 className="font-black text-sm">{t("ai.name")}</h3>
                   <p className="text-[10px] font-bold opacity-70 uppercase tracking-widest">AI Powered</p>
                 </div>
               </div>

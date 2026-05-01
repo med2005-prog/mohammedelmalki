@@ -78,7 +78,7 @@ export function ImageUpload({ onUpload, onRemove, value }: ImageUploadProps) {
               </div>
               <div className="text-center">
                 <p className="font-bold">
-                  {language === 'ar' ? "اضغط لرفع الصورة" : language === 'fr' ? "Cliquez pour télécharger" : "Click to upload image"}
+                  {t("common.clickToUpload")}
                 </p>
                 <p className="text-xs text-muted-foreground uppercase font-black tracking-widest mt-1">PNG, JPG up to 10MB</p>
               </div>

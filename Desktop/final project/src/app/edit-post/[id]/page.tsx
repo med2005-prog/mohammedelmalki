@@ -97,12 +97,12 @@ export default function EditPostPage({ params }: { params: Promise<{ id: string 
         className="flex items-center gap-2 text-muted-foreground mb-6 hover:text-foreground"
       >
         <ArrowLeft size={20} className={dir === 'rtl' ? 'rotate-180' : ''} />
-        {language === 'ar' ? "رجوع" : "Back"}
+        {t("common.back")}
       </button>
 
       <div className="glass-card p-8 rounded-3xl border">
         <h1 className="text-3xl font-black mb-8">
-          {language === 'ar' ? "تعديل المنشور" : "Edit Post"}
+          {t("edit.title")}
         </h1>
 
         {error && <p className="text-destructive mb-4 font-bold">{error}</p>}
@@ -110,7 +110,8 @@ export default function EditPostPage({ params }: { params: Promise<{ id: string 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label className="block text-sm font-bold mb-2">
-              {language === 'ar' ? "العنوان" : "Title"}
+              {t("common.title")}
+              {t("form.whatLost")}
             </label>
             <input
               type="text"
@@ -123,7 +124,7 @@ export default function EditPostPage({ params }: { params: Promise<{ id: string 
 
           <div>
             <label className="block text-sm font-bold mb-2">
-              {language === 'ar' ? "الوصف" : "Description"}
+              {t("form.details")}
             </label>
             <textarea
               value={formData.description}
@@ -136,7 +137,7 @@ export default function EditPostPage({ params }: { params: Promise<{ id: string 
 
           <div>
             <label className="block text-sm font-bold mb-2">
-              {language === 'ar' ? "الصورة" : "Image"}
+              {t("form.image")}
             </label>
             <ImageUpload
               value={formData.imageUrl}
@@ -150,7 +151,7 @@ export default function EditPostPage({ params }: { params: Promise<{ id: string 
             className="w-full bg-primary text-white p-4 rounded-xl font-black flex items-center justify-center gap-2 hover:bg-primary/90 disabled:opacity-50"
           >
             {saving ? <Loader2 size={20} className="animate-spin" /> : <Save size={20} />}
-            {language === 'ar' ? "حفظ التغييرات" : "Save Changes"}
+            {t("edit.save")}
           </button>
         </form>
       </div>

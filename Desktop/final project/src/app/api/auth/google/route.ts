@@ -68,7 +68,8 @@ export async function POST(req: Request) {
         name: user.name,
         email: user.email,
         avatar: user.avatar,
-        isBusiness: user.isBusiness,
+        role: user.role,
+        isPremium: user.isPremium,
       },
     });
 

@@ -73,7 +73,7 @@ export function TopBar({ onMenuClick }: { onMenuClick?: () => void }) {
       </button>
 
       <div className="lg:hidden font-black text-xl tracking-tight shrink-0">
-        Recover<span className="text-primary">It</span>
+        Fin<span className="text-primary">Huwa</span>
       </div>
 
       {/* Search & Location Group */}
@@ -83,25 +83,26 @@ export function TopBar({ onMenuClick }: { onMenuClick?: () => void }) {
       >
         <div className={cn("flex items-center gap-2 py-2 border-border/50 hover:bg-secondary-foreground/5 cursor-pointer group", 
           dir === 'rtl' ? "pr-4 pl-3 border-l rounded-r-full" : "pl-4 pr-3 border-r rounded-l-full"
-        )}>
+        )} suppressHydrationWarning>
           {isLocLoading ? (
             <Loader2 size={16} className="text-primary animate-spin" />
           ) : (
             <MapPin size={16} className="text-muted-foreground group-hover:text-primary transition-colors" />
           )}
-          <span className="text-sm font-medium whitespace-nowrap">
-            {isLocLoading ? (language === 'ar' ? "جاري التحديد..." : "Locating...") : location}
+          <span className="text-sm font-medium whitespace-nowrap" suppressHydrationWarning>
+            {isLocLoading ? t("common.locating") : location}
           </span>
         </div>
 
         <div className="flex-1 flex items-center px-3 py-2 relative">
-          <Search size={16} className={cn("text-muted-foreground shrink-0", dir === 'rtl' ? "ml-2" : "mr-2")} />
+          <Search size={16} className={cn("text-muted-foreground shrink-0", dir === 'rtl' ? "ml-2" : "mr-2")} suppressHydrationWarning />
           <input 
             type="text" 
             placeholder={t("topbar.search")} 
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full bg-transparent border-none focus:outline-none text-sm placeholder:text-muted-foreground/70"
+            suppressHydrationWarning
           />
           {searchQuery && (
             <button 
@@ -119,6 +120,7 @@ export function TopBar({ onMenuClick }: { onMenuClick?: () => void }) {
             className={cn("px-4 py-1.5 bg-primary text-white text-xs font-black rounded-full hover:opacity-90 transition-all shadow-sm shrink-0",
               dir === 'rtl' ? "mr-1" : "ml-1"
             )}
+            suppressHydrationWarning
           >
             {t("topbar.btnSearch")}
           </button>
@@ -175,7 +177,7 @@ export function TopBar({ onMenuClick }: { onMenuClick?: () => void }) {
                   <Link href="/profile" className="flex items-center gap-2 px-3 py-2 text-sm font-bold hover:bg-secondary rounded-xl transition-colors">
                     <User size={16} /> {t("topbar.profile")}
                   </Link>
-                  {user.isBusiness && (
+                  {user.role === "partner" && (
                     <Link href="/business/dashboard" className="flex items-center gap-2 px-3 py-2 text-sm font-bold hover:bg-secondary rounded-xl transition-colors">
                       <Briefcase size={16} /> {t("dash.title")}
                     </Link>

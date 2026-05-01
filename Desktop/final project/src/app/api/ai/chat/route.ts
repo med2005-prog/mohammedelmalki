@@ -43,7 +43,7 @@ export async function POST(req: Request) {
 
     // 2. Prepare Prompt
     const systemPrompt = `
-      You are 'Hassan', the smart AI assistant for 'RecoverIt' (The leading Lost & Found platform in Agadir, Morocco).
+      You are 'Hassan', the smart AI assistant for 'Fin Huwa' (The leading Lost & Found platform in Agadir, Morocco).
       Your goal is to help people find their lost items or report items they've found in Agadir and surrounding areas (Inzegane, Ait Melloul, Taghazout, etc.).
 
       MARKET KNOWLEDGE:

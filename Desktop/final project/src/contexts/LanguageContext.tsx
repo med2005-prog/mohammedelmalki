@@ -16,15 +16,17 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [language, setLanguageState] = useState<Language>("en");
+  const [mounted, setMounted] = useState(false);
 
   // Load saved language on mount
   useEffect(() => {
+    setMounted(true);
     const saved = localStorage.getItem("language") as Language;
     if (saved && ["en", "fr", "ar"].includes(saved)) {
       setLanguageState(saved);
     } else {
       // Auto-detect based on browser if needed
-      const browserLang = navigator.language.split('-')[0];
+      const browserLang = typeof navigator !== "undefined" ? navigator.language.split('-')[0] : "en";
       if (browserLang === 'fr') setLanguageState('fr');
       else if (browserLang === 'ar') setLanguageState('ar');
     }
@@ -35,21 +37,29 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem("language", lang);
   };
 
+  // IMPORTANT: For hydration, we MUST use the default "en" until mounted.
+  // This ensures the first client render matches the server render.
+  const activeLanguage = mounted ? language : "en";
+
   const t = (key: TranslationsKey): string => {
-    return translations[language][key] || translations.en[key] || key;
+    return translations[activeLanguage][key] || translations.en[key] || key;
   };
 
-  const dir = language === "ar" ? "rtl" : "ltr";
+  const activeDir = activeLanguage === "ar" ? "rtl" : "ltr";
 
   // Update document direction and language class for html when language changes
   useEffect(() => {
-    document.documentElement.dir = dir;
-    document.documentElement.lang = language;
-  }, [language, dir]);
+    if (mounted) {
+      document.documentElement.dir = activeDir;
+      document.documentElement.lang = activeLanguage;
+    }
+  }, [activeLanguage, activeDir, mounted]);
 
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, t, dir }}>
-      {children}
+    <LanguageContext.Provider value={{ language: activeLanguage, setLanguage, t, dir: activeDir }}>
+      <div className={mounted ? "" : "invisible"}>
+        {children}
+      </div>
     </LanguageContext.Provider>
   );
 }

@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface SidebarProps {
   onClose?: () => void;
@@ -25,7 +26,8 @@ interface SidebarProps {
 
 export function Sidebar({ onClose, className }: SidebarProps) {
   const pathname = usePathname();
-  const { t, dir } = useLanguage();
+  const { t, dir, language } = useLanguage();
+  const { user } = useAuth();
   const [unreadMessages, setUnreadMessages] = useState(0);
   const [unreadNotifications, setUnreadNotifications] = useState(0);
 
@@ -42,7 +44,7 @@ export function Sidebar({ onClose, className }: SidebarProps) {
         if (msgData.success) setUnreadMessages(msgData.data);
         if (notifData.success) setUnreadNotifications(notifData.data);
       } catch (error) {
-        console.error("Failed to fetch sidebar counts", error);
+        console.error(t("common.failedSidebarFetch"), error);
       }
     };
 
@@ -50,7 +52,7 @@ export function Sidebar({ onClose, className }: SidebarProps) {
     // Refresh every 30 seconds
     const interval = setInterval(fetchCounts, 30000);
     return () => clearInterval(interval);
-  }, []);
+  }, [t]);
 
   const navItems = [
     { name: t("nav.home"), href: "/", icon: Home },
@@ -62,28 +64,54 @@ export function Sidebar({ onClose, className }: SidebarProps) {
     { name: t("nav.businesses"), href: "/businesses", icon: Briefcase },
   ];
 
+  // Add Partner specific dashboard link
+  if (user?.role === "partner") {
+    navItems.push({
+      name: t("nav.businessDashboard"),
+      href: "/business/dashboard",
+      icon: Briefcase
+    });
+  }
+
 
   return (
     <aside className={cn(
       "flex flex-col border-r bg-card/80 backdrop-blur-xl transition-all duration-300 h-full",
       className
-    )} dir={dir}>
+    )} dir={dir} suppressHydrationWarning>
       <div className="h-16 flex items-center justify-between px-6 border-b">
         <Link href="/" className="flex items-center gap-2.5 group" onClick={onClose}>
           <div className="relative shrink-0">
-            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="drop-shadow-lg">
               <defs>
-                <linearGradient id="logo-bg" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
-                  <stop offset="0%" stopColor="#1e3a8a"/>
+                <linearGradient id="logo-gradient" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stopColor="#1e40af"/>
                   <stop offset="100%" stopColor="#3b82f6"/>
                 </linearGradient>
+                <filter id="inner-shadow">
+                  <feOffset dx="0" dy="1"/>
+                  <feGaussianBlur stdDeviation="1" result="offset-blur"/>
+                  <feComposite operator="out" in="SourceGraphic" in2="offset-blur" result="inverse"/>
+                  <feFlood floodColor="black" floodOpacity="0.2" result="color"/>
+                  <feComposite operator="in" in="color" in2="inverse" result="shadow"/>
+                  <feComposite operator="over" in="shadow" in2="SourceGraphic"/>
+                </filter>
               </defs>
-              <rect width="32" height="32" rx="8" fill="url(#logo-bg)"/>
-              <circle cx="14" cy="13" r="6" stroke="white" strokeWidth="2.5" fill="none"/>
-              <line x1="18.5" y1="17.5" x2="22" y2="21" stroke="white" strokeWidth="2.5" strokeLinecap="round"/>
+              <rect width="40" height="40" rx="12" fill="url(#logo-gradient)"/>
+              {/* Stylized Pin + Magnifier */}
+              <path 
+                d="M20 10C15.5817 10 12 13.5817 12 18C12 23.5 20 30 20 30C20 30 28 23.5 28 18C28 13.5817 24.4183 10 20 10Z" 
+                stroke="white" 
+                strokeWidth="2.5" 
+                strokeLinejoin="round"
+                fill="white"
+                fillOpacity="0.1"
+              />
+              <circle cx="20" cy="18" r="4" stroke="white" strokeWidth="2.5"/>
+              <path d="M23 21L26 24" stroke="white" strokeWidth="2.5" strokeLinecap="round"/>
             </svg>
           </div>
-          <span className="font-black text-lg tracking-tight">Recover<span className="text-primary">It</span></span>
+          <span className="font-black text-lg tracking-tight">Fin<span className="text-primary">Huwa</span></span>
         </Link>
         {onClose && (
           <button onClick={onClose} className="p-2 md:hidden">

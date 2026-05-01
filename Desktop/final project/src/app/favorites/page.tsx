@@ -48,7 +48,7 @@ export default function FavoritesPage() {
           
           <div className="space-y-2">
             <h2 className="text-2xl font-black tracking-tight">
-              {language === 'ar' ? "مجموعتك فارغة" : language === 'fr' ? "Votre collection est vide" : "Your collection is empty"}
+              {t("fav.empty")}
             </h2>
             <p className="text-muted-foreground max-w-sm mx-auto">
               {language === 'ar' 

@@ -7,7 +7,8 @@ interface User {
   _id: string;
   name: string;
   email: string;
-  isBusiness: boolean;
+  role: "user" | "partner";
+  isPremium: boolean;
   avatar?: string;
   isVerified?: boolean;
   phone?: string;
@@ -24,6 +25,7 @@ interface AuthContextType {
   register: (data: any) => Promise<void>;
   googleLogin: (access_token: string) => Promise<void>;
   logout: () => Promise<void>;
+  refreshUser: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -33,23 +35,27 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
-  useEffect(() => {
-    // Check if user is logged in (session stored in cookie)
-    const checkUser = async () => {
-      try {
-        const res = await fetch("/api/auth/me");
-        const data = await res.json();
-        if (data.success) {
-          setUser(data.data);
-        }
-      } catch (err) {
-        console.error("Auth check failed", err);
-      } finally {
-        setLoading(false);
+  const checkUser = async () => {
+    try {
+      const res = await fetch("/api/auth/me");
+      const data = await res.json();
+      if (data.success) {
+        setUser(data.data);
       }
-    };
+    } catch (err) {
+      console.error("Auth check failed", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     checkUser();
   }, []);
+
+  const refreshUser = async () => {
+    await checkUser();
+  };
 
   const login = async (credentials: any) => {
     const res = await fetch("/api/auth/login", {
@@ -103,7 +109,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, googleLogin, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, register, googleLogin, logout, refreshUser }}>
       {children}
     </AuthContext.Provider>
   );

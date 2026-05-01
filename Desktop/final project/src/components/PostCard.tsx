@@ -25,6 +25,8 @@ interface PostCardProps {
     name: string;
     avatar?: string;
     isVerified?: boolean;
+    role?: "user" | "partner";
+    isPremium?: boolean;
   };
   boosted?: boolean;
   boostType?: string;
@@ -54,11 +56,12 @@ export function PostCard({
 
   // Resolve the active plan from either field (new boostPlan or legacy boostType)
   const activePlan = (boostType as string) || "";
-  const isPremium = activePlan === "premium";
-  const isPro     = activePlan === "pro";
-  const isStarter = activePlan === "starter";
+  const isPremiumPost = activePlan === "premium";
+  const isProPost     = activePlan === "pro";
+  const isStarterPost = activePlan === "starter";
 
   const isOwner = user?._id === author?._id;
+  const isPartner = author?.role === "partner";
 
   const handleDelete = async () => {
     if (!confirm(t("post.deleteConfirm"))) return;
@@ -77,7 +80,7 @@ export function PostCard({
     <>
       <div className={cn(
         "glass-card rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg group relative",
-        boosted && "ring-2 ring-primary shadow-xl shadow-primary/10 bg-primary/[0.02]",
+        (boosted || isPartner) && "ring-2 ring-primary shadow-xl shadow-primary/10 bg-primary/[0.02]",
         isDeleting && "opacity-50 grayscale pointer-events-none"
       )} dir={dir}>
         {/* Header Info */}
@@ -89,22 +92,30 @@ export function PostCard({
               ) : (
                 <span className="font-bold text-muted-foreground">{(author?.name || "U").charAt(0)}</span>
               )}
-              {author?.isVerified && (
-                <div className="absolute -bottom-1 -right-1 bg-primary text-white p-0.5 rounded-full border-2 border-white">
-                  <Zap size={8} fill="currentColor" />
+              {(author?.isVerified || isPartner) && (
+                <div className={cn(
+                  "absolute -bottom-1 -right-1 p-0.5 rounded-full border-2 border-white",
+                  isPartner ? "bg-amber-500" : "bg-primary"
+                )}>
+                  <Zap size={8} className="text-white" fill="currentColor" />
                 </div>
               )}
             </div>
             <div>
               <h4 className="text-sm font-bold flex items-center gap-1">
                 {author?.name || "System User"}
-                {boosted && <Zap size={14} className="text-primary fill-primary" />}
+                {(boosted || isPartner) && <Zap size={14} className={cn("fill-current", isPartner ? "text-amber-500" : "text-primary")} />}
               </h4>
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
                 <span className="flex items-center gap-1">
                   <Clock size={12} />
                   {formatDistanceToNow(new Date(date), { addSuffix: true, locale })}
                 </span>
+                {isPartner && (
+                  <span className="text-amber-600 font-bold flex items-center gap-1">
+                    <Briefcase size={10} /> {language === 'ar' ? 'شريك موثوق' : 'Trusted Partner'}
+                  </span>
+                )}
               </div>
             </div>
           </div>
@@ -151,7 +162,7 @@ export function PostCard({
         {imageUrl && (
           <Link href={`/posts/${id}`} className="block w-full h-48 sm:h-64 relative bg-secondary overflow-hidden">
             <Image 
-              src={imageUrl} 
+              src={optimizeImage(imageUrl, 600)} 
               alt={title} 
               fill 
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -168,17 +179,20 @@ export function PostCard({
               )}>
                 {type === "lost" ? t("post.lost") : t("post.found")}
               </span>
-              {boosted && (
-                <span className="px-3 py-1 rounded-full text-xs font-black bg-primary text-white shadow-lg flex items-center gap-1 animate-pulse">
-                  <Zap size={12} fill="currentColor" /> {t("post.featured")}
+              {(boosted || isPartner) && (
+                <span className={cn(
+                  "px-3 py-1 rounded-full text-xs font-black shadow-lg flex items-center gap-1 animate-pulse text-white",
+                  isPartner ? "bg-amber-500" : "bg-primary"
+                )}>
+                  <Zap size={12} fill="currentColor" /> {isPartner ? t("biz.partner") : t("post.featured")}
                 </span>
               )}
-              {isPremium && (
+              {isPremiumPost && (
                 <span className="px-3 py-1 rounded-full text-xs font-black bg-amber-500 text-white shadow-lg">
                   {t("post.urgent")}
                 </span>
               )}
-              {isPro && (
+              {isProPost && (
                 <span className="px-3 py-1 rounded-full text-xs font-black bg-violet-600 text-white shadow-lg">
                   PRO
                 </span>
